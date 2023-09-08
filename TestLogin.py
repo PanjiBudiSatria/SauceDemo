@@ -8,16 +8,19 @@ from selenium.webdriver.support import expected_conditions as EC
 from webdriver_manager.chrome import ChromeDriverManager
 
 class SauceDemoLoginTest(unittest.TestCase):
+    #Set up for the web driver
     def setUp(self):
         chrome_driver_path = ChromeDriverManager().install()
         service = Service(executable_path=chrome_driver_path)
         self.driver = webdriver.Chrome(service=service)
         self.driver.maximize_window()
 
+    #Close after testing a scenario
     def tearDown(self):
         if self.driver:
             self.driver.quit()
 
+    #Login method
     def login(self, username, password):
         self.driver.get('https://www.saucedemo.com/')
         WebDriverWait(self.driver, 10).until(EC.presence_of_element_located((By.ID, 'user-name')))
@@ -31,6 +34,7 @@ class SauceDemoLoginTest(unittest.TestCase):
     def test_positive_login(self):
         self.login('standard_user', 'secret_sauce')
         WebDriverWait(self.driver, 10).until(EC.title_contains('Swag Labs'))
+        #Get title page
         products_title = self.driver.title
         self.assertEqual(products_title, 'Swag Labs', "Login was unsuccessful")
 
